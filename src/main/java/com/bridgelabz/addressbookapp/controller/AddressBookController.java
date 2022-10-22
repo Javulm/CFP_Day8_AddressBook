@@ -31,9 +31,9 @@ public class AddressBookController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/getbyname/{firstname}")
-    public ResponseEntity<ResponseDTO> getAddressBookData(@PathVariable("firstname") String firstname) {
-        List<AddressBookData> addressBookData = addressBookService.findAddressBookByFirstName(firstname);
+    @GetMapping("/getbyname/{username}")
+    public ResponseEntity<ResponseDTO> getAddressBookData(@PathVariable("username") String username) {
+        List<AddressBookData> addressBookData = addressBookService.findAddressBookByFirstName(username);
         ResponseDTO responseDTO = new ResponseDTO("Get call for firstname is successfull", addressBookData);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
@@ -54,14 +54,26 @@ public class AddressBookController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseDTO> updateAddressBookData(@PathVariable("id") int id, @Valid @RequestBody AddressBookDTO addressBookDTO) {
-        AddressBookData addressBookData = addressBookService.updateAddressBookByFirstName(id, addressBookDTO);
+        AddressBookData addressBookData = addressBookService.updateAddressBookById(id, addressBookDTO);
         ResponseDTO responseDTO = new ResponseDTO("AddressBook details updated", addressBookData);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseDTO> deleteAddressBookdata(@PathVariable("id") int id){
-        addressBookService.deleteAddressBookByFirstName(id);
+        addressBookService.deleteAddressBookById(id);
         ResponseDTO responseDTO = new ResponseDTO("Deleted Addressbook data successfully", id);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+    @GetMapping("/sortbycity")
+    public ResponseEntity<ResponseDTO> sortAddressBookDataByCity() {
+        List<AddressBookData> addressBookData = addressBookService.sortAddressBookByCity();
+        ResponseDTO responseDTO = new ResponseDTO("Get call for sort city is successfull", addressBookData);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+    @GetMapping("/sortbystate")
+    public ResponseEntity<ResponseDTO> sortAddressBookDataByState() {
+        List<AddressBookData> addressBookData = addressBookService.sortAddressBookByState();
+        ResponseDTO responseDTO = new ResponseDTO("Get call for sort State is successfull", addressBookData);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }

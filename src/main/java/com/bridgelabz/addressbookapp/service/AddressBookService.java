@@ -25,13 +25,21 @@ public class AddressBookService implements IAddressBookService {
     }
 
     @Override
-    public List<AddressBookData> findAddressBookByFirstName(String firstname) {
-        return addressBookRepository.findAddressBookDataByFirstname(firstname);
+    public List<AddressBookData> findAddressBookByFirstName(String username) {
+        List<AddressBookData> addressBookDataList = addressBookRepository.getAddressBookDataByUsername(username);
+        if (addressBookDataList.isEmpty()) {
+            throw new AddressBookException("AddressBookData with firstname " + username + "does not exist");
+        }
+        return addressBookDataList;
     }
 
     @Override
     public List<AddressBookData> findAddressBookByState(String state) {
-        return addressBookRepository.findAddressBookDataByState(state);
+        List<AddressBookData> addressBookDataList = addressBookRepository.findAddressBookDataByState(state);
+        if (addressBookDataList.isEmpty()) {
+            throw new AddressBookException("AddressBookData with state " + state + "does not exist");
+        }
+        return addressBookDataList;
     }
 
     @Override
@@ -41,15 +49,25 @@ public class AddressBookService implements IAddressBookService {
     }
 
     @Override
-    public AddressBookData updateAddressBookByFirstName(int id, AddressBookDTO addressBookDTO) {
+    public AddressBookData updateAddressBookById(int id, AddressBookDTO addressBookDTO) {
         AddressBookData addressBookData = this.findAddressBookById(id);
         addressBookData.updateAddressBookData(addressBookDTO);
         return addressBookRepository.save(addressBookData);
     }
 
     @Override
-    public void deleteAddressBookByFirstName(int id) {
+    public void deleteAddressBookById(int id) {
         AddressBookData addressBookData = this.findAddressBookById(id);
         addressBookRepository.delete(addressBookData);
+    }
+
+    @Override
+    public List<AddressBookData> sortAddressBookByCity() {
+        return addressBookRepository.sortAddressBookByCity();
+    }
+
+    @Override
+    public List<AddressBookData> sortAddressBookByState() {
+        return addressBookRepository.sortAddressBookByState();
     }
 }

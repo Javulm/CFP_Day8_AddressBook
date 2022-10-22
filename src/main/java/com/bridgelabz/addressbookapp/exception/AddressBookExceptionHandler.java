@@ -15,8 +15,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @ControllerAdvice
-public class AddressBookExcetionHandler {
-    private static  final String message = "Exception while Processing REST Request";
+public class AddressBookExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDTO> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception){
@@ -27,7 +26,7 @@ public class AddressBookExcetionHandler {
         return new ResponseEntity<>(responseDTO, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(AddressBookException.class)
-    public ResponseEntity<ResponseDTO> handleEmployeePayrollException(AddressBookException exception){
+    public ResponseEntity<ResponseDTO> handleAddressBookException(AddressBookException exception){
         ResponseDTO responseDTO = new ResponseDTO("Exception while processing REST Request", exception.getMessage());
         return new ResponseEntity<>(responseDTO, HttpStatus.BAD_REQUEST);
     }

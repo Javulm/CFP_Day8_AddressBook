@@ -7,15 +7,20 @@ import java.util.List;
 
 public interface IAddressBookService {
     List<AddressBookData> getAddressBookData();
+
     AddressBookData findAddressBookById(int id);
 
     List<AddressBookData> findAddressBookByFirstName(String firstname);
+
     List<AddressBookData> findAddressBookByState(String state);
 
     AddressBookData addAddressBookData(AddressBookDTO addressBookDTO);
 
-    AddressBookData updateAddressBookByFirstName(int id, AddressBookDTO addressBookDTO);
+    AddressBookData updateAddressBookById(int id, AddressBookDTO addressBookDTO);
 
-    void deleteAddressBookByFirstName(int id);
+    void deleteAddressBookById(int id);
 
+    List<AddressBookData> sortAddressBookByCity();
+
+    List<AddressBookData> sortAddressBookByState();
 }
