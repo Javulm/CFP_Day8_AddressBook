@@ -2,12 +2,9 @@ package com.bridgelabz.addressbookapp.controller;
 
 import com.bridgelabz.addressbookapp.dto.ResponseDTO;
 import com.bridgelabz.addressbookapp.dto.UserDTO;
-import com.bridgelabz.addressbookapp.model.AddressBookData;
 import com.bridgelabz.addressbookapp.model.User;
-import com.bridgelabz.addressbookapp.service.AddressBookService;
 import com.bridgelabz.addressbookapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +18,10 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private AddressBookService addressBookService;
-
     @PostMapping("/registration")
     public ResponseEntity<ResponseDTO> userRegistration(@Valid @RequestBody UserDTO userDTO) {
-        User user = userService.userRegistration(userDTO);
-        ResponseDTO responseDTO = new ResponseDTO("User registration successful.", user);
+        String token = userService.userRegistration(userDTO);
+        ResponseDTO responseDTO = new ResponseDTO("User registration successful.", token);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 

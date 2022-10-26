@@ -4,6 +4,7 @@ import com.bridgelabz.addressbookapp.dto.AddressBookDTO;
 import com.bridgelabz.addressbookapp.exception.AddressBookException;
 import com.bridgelabz.addressbookapp.model.AddressBookData;
 import com.bridgelabz.addressbookapp.repository.AddressBookRepository;
+import com.bridgelabz.addressbookapp.util.AddressBookUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ import java.util.List;
 public class AddressBookService implements IAddressBookService {
     @Autowired
     private AddressBookRepository addressBookRepository;
+    @Autowired
+    private AddressBookUtility addressBookUtility;
 
     @Override
     public List<AddressBookData> getAddressBookData() {
@@ -20,8 +23,9 @@ public class AddressBookService implements IAddressBookService {
     }
 
     @Override
-    public AddressBookData findAddressBookById(int id) {
-        return addressBookRepository.findById(id).orElseThrow(() -> new AddressBookException("AddressBook with Id " + id + "does not exists."));
+    public AddressBookData findAddressBookById(String token) {
+        int Id = addressBookUtility.decodeJWT(token);
+        return addressBookRepository.findById(Id).orElseThrow(() -> new AddressBookException("AddressBook with Id " + Id + "does not exists."));
     }
 
     @Override
@@ -43,21 +47,23 @@ public class AddressBookService implements IAddressBookService {
     }
 
     @Override
-    public AddressBookData addAddressBookData(AddressBookDTO addressBookDTO) {
+    public String addAddressBookData(AddressBookDTO addressBookDTO) {
         AddressBookData addressBookData = new AddressBookData(addressBookDTO);
-        return addressBookRepository.save(addressBookData);
+        addressBookRepository.save(addressBookData);
+        String token =addressBookUtility.createToken(addressBookData.getId());
+        return token;
     }
 
     @Override
-    public AddressBookData updateAddressBookById(int id, AddressBookDTO addressBookDTO) {
-        AddressBookData addressBookData = this.findAddressBookById(id);
+    public AddressBookData updateAddressBookById(String token, AddressBookDTO addressBookDTO) {
+        AddressBookData addressBookData = this.findAddressBookById(token);
         addressBookData.updateAddressBookData(addressBookDTO);
         return addressBookRepository.save(addressBookData);
     }
 
     @Override
-    public void deleteAddressBookById(int id) {
-        AddressBookData addressBookData = this.findAddressBookById(id);
+    public void deleteAddressBookById(String token) {
+        AddressBookData addressBookData = this.findAddressBookById(token);
         addressBookRepository.delete(addressBookData);
     }
 
