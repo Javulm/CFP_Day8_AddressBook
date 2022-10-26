@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IUserService {
 
-    User userRegistration(UserDTO userDTO);
+    String  userRegistration(UserDTO userDTO);
 
     List<User> loginUser(String username, String password);
 
