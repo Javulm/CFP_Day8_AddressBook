@@ -5,6 +5,7 @@ import com.bridgelabz.addressbookapp.exception.AddressBookException;
 import com.bridgelabz.addressbookapp.model.AddressBookData;
 import com.bridgelabz.addressbookapp.repository.AddressBookRepository;
 import com.bridgelabz.addressbookapp.util.AddressBookUtility;
+import com.bridgelabz.addressbookapp.util.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,8 @@ import java.util.List;
 
 @Service
 public class AddressBookService implements IAddressBookService {
+    @Autowired
+    private EmailSender emailSender;
     @Autowired
     private AddressBookRepository addressBookRepository;
     @Autowired
@@ -50,14 +53,15 @@ public class AddressBookService implements IAddressBookService {
     public String addAddressBookData(AddressBookDTO addressBookDTO) {
         AddressBookData addressBookData = new AddressBookData(addressBookDTO);
         addressBookRepository.save(addressBookData);
-        String token =addressBookUtility.createToken(addressBookData.getId());
-        return token;
+        emailSender.sendEmail(addressBookData.getEmail(), "test Email", "Data added successfully");
+        return addressBookUtility.createToken(addressBookData.getId());
     }
 
     @Override
     public AddressBookData updateAddressBookById(String token, AddressBookDTO addressBookDTO) {
         AddressBookData addressBookData = this.findAddressBookById(token);
         addressBookData.updateAddressBookData(addressBookDTO);
+        emailSender.sendEmail(addressBookData.getEmail(), "test Email", "Data updated successfully");
         return addressBookRepository.save(addressBookData);
     }
 
