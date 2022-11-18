@@ -26,7 +26,12 @@ public class AddressBookService implements IAddressBookService {
     }
 
     @Override
-    public AddressBookData findAddressBookById(String token) {
+    public AddressBookData findAddressBookById(int id) {
+        return addressBookRepository.findById(id).orElseThrow(() -> new AddressBookException("AddressBook with Id " + id + "does not exists."));
+    }
+
+    @Override
+    public AddressBookData findAddressBookByToken(String token) {
         int Id = addressBookUtility.decodeJWT(token);
         return addressBookRepository.findById(Id).orElseThrow(() -> new AddressBookException("AddressBook with Id " + Id + "does not exists."));
     }
@@ -58,16 +63,16 @@ public class AddressBookService implements IAddressBookService {
     }
 
     @Override
-    public AddressBookData updateAddressBookById(String token, AddressBookDTO addressBookDTO) {
-        AddressBookData addressBookData = this.findAddressBookById(token);
+    public AddressBookData updateAddressBookById(int id, AddressBookDTO addressBookDTO) {
+        AddressBookData addressBookData = this.findAddressBookById(id);
         addressBookData.updateAddressBookData(addressBookDTO);
         emailSender.sendEmail(addressBookData.getEmail(), "test Email", "Data updated successfully");
         return addressBookRepository.save(addressBookData);
     }
 
     @Override
-    public void deleteAddressBookById(String token) {
-        AddressBookData addressBookData = this.findAddressBookById(token);
+    public void deleteAddressBookById(int id) {
+        AddressBookData addressBookData = this.findAddressBookById(id);
         addressBookRepository.delete(addressBookData);
     }
 
