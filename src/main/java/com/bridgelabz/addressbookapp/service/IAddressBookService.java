@@ -8,7 +8,8 @@ import java.util.List;
 public interface IAddressBookService {
     List<AddressBookData> getAddressBookData();
 
-    AddressBookData findAddressBookById(String token);
+    AddressBookData findAddressBookByToken(String token);
+    AddressBookData findAddressBookById(int id);
 
     List<AddressBookData> findAddressBookByFirstName(String firstname);
 
@@ -16,9 +17,9 @@ public interface IAddressBookService {
 
     String  addAddressBookData(AddressBookDTO addressBookDTO);
 
-    AddressBookData updateAddressBookById(String token, AddressBookDTO addressBookDTO);
+    AddressBookData updateAddressBookById(int id, AddressBookDTO addressBookDTO);
 
-    void deleteAddressBookById(String token);
+    void deleteAddressBookById(int id);
 
     List<AddressBookData> sortAddressBookByCity();
 
